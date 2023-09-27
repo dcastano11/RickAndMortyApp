@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "filename" : "HD-wallpaper-rick-and-morty-morty-rick-thumbnail.jpg",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "HD-wallpaper-rick-and-morty-morty-rick-thumbnail 1.jpg",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "HD-wallpaper-rick-and-morty-morty-rick-thumbnail 2.jpg",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
