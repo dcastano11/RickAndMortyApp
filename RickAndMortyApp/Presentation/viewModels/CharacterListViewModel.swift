@@ -2,33 +2,58 @@
 //  CharaceterListViewModel.swift
 //  RickAndMortyApp
 //
-//  Created by ANRA on 25/09/23.
+//  Created by David Castaño on 26/09/23.
 //
 
 import Foundation
 import Combine
 
 
-class CharacterListViewModel: ObservableObject{
-   
+protocol CharacterListViewModelProtocol: ObservableObject {
+    
+    var currentPage: Int {get set}
+    var listData: [Character] {get}
+    var filteredListData: [Character]{get}
+    var isLoading: Bool {get}
+    var hasMorePages: Bool {get}
+    var textFieldBuffer: String {get set}
+    
+    func getMoreData()
+}
+
+class CharacterListViewModel: CharacterListViewModelProtocol{
+    
+    @Published var textFieldBuffer: String = ""
+    {didSet{filterRecipes(searchWord: textFieldBuffer)}}
+    var interactor: CharacterListUseCasesProtocol// = CharacterListUseCases()
     @Published var currentPage = 0
-    {
-        didSet{
-            hasMorePages = currentPage < maxPage
-            
-        }
-    }
+    {didSet{hasMorePages = currentPage < maxPage}}
     @Published var listData: [Character] = []
+    {didSet{filterRecipes(searchWord: textFieldBuffer)}}
+    @Published var filteredListData: [Character] = []
     @Published var isLoading = false
     @Published var hasMorePages = true
-    var maxPage = 100
+    var maxPage = Int.max
     var cancellable: Set<AnyCancellable> = []
     
-    func getData(){
+    init(interactor: CharacterListUseCasesProtocol) {
+        self.interactor = interactor
+    }
+    
+    func filterRecipes(searchWord:String?){
+        if let word = searchWord, word != "" {
+            filteredListData = listData.filter { character in
+                character.name.lowercased().contains(word.lowercased())
+            }
+        }
+        else{filteredListData = listData}
+    }
+    
+    func getMoreData(){
         currentPage += 1
         self.isLoading = true
         
-        RickAndMortyService().getCharacterPage(page: currentPage).sink { completion in
+        interactor.getCharactersPage(pageNum: currentPage).sink { completion in
             
             self.isLoading = false
             switch(completion){
@@ -39,11 +64,9 @@ class CharacterListViewModel: ObservableObject{
                     print("failure")
             }
         } receiveValue: { response in
-            
-            DispatchQueue.main.async {
-                self.maxPage = response.info.pages
-                self.listData.append(contentsOf: response.results)
-            }
+            self.maxPage = response.info.pages
+            self.listData.append(contentsOf: response.results)
+
         }.store(in: &cancellable)
     }
 }

@@ -2,7 +2,7 @@
 //  RickAndMortyAppUITestsLaunchTests.swift
 //  RickAndMortyAppUITests
 //
-//  Created by ANRA on 25/09/23.
+//  Created by David Castaño on 26/09/23.
 //
 
 import XCTest

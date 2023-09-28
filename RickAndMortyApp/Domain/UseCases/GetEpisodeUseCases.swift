@@ -8,12 +8,16 @@
 import Foundation
 import Combine
 
-class CharacterListUseCases {
+protocol GetEpisodeUseCasesProtocol{
+    func getEpisodeInfo(episodeNum: Int) -> AnyPublisher<EpisodeResponse, Error>
+}
+
+class GetEpisodeUseCases: GetEpisodeUseCasesProtocol {
     
-    let repo: RickAndMortyCharacterListRepository = RickAndMortyListCharacterService(url: baseUrl + getAllCharactersEndpoint)
+    let repo: EpisodeRepository = EpisodeService(url: baseUrl + getEpisodeEndpoint)
     
-    func getCharactersPage(pageNum: Int) -> AnyPublisher<RickAndMortyResponse, Error>{
-        return repo.getCharactersPage(page: pageNum)
+    func getEpisodeInfo(episodeNum: Int) -> AnyPublisher<EpisodeResponse, Error>{
+        return repo.getEpisodeInfo(episode: episodeNum)
     }
     
 }

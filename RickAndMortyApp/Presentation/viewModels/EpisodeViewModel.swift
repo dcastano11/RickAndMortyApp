@@ -2,38 +2,26 @@
 //  EpisodeViewModel.swift
 //  RickAndMortyApp
 //
-//  Created by David Castaño on 26/09/23.
+//  Created by ANRA on 27/09/23.
 //
 
 import Foundation
 import Combine
 
-protocol EpisodeCellViewModelProtocol: ObservableObject{
+protocol EpisodeViewModelProtocol: ObservableObject{
     var episode: EpisodeResponse? {get}
     var isLoading: Bool {get set}
-    var episodeNumber: Int {get set}
-    
-    
-    func getEpisode()
 }
 
-class EpisodeCellViewModel:EpisodeCellViewModelProtocol{
+class EpisodeViewModel:EpisodeViewModelProtocol{
     
-    var interactor: GetEpisodeUseCasesProtocol
     @Published var episode:EpisodeResponse?
     @Published var isLoading = true
-    @Published var episodeNumber: Int
     var store: Set<AnyCancellable> = []
     
-    init(episodeNumber: Int, interactor: GetEpisodeUseCasesProtocol) {
-        self.episodeNumber = episodeNumber
-        self.interactor = interactor
+    func getEpisode(episode: Int){
         
-    }
-       
-    func getEpisode(){
-        
-        interactor.getEpisodeInfo(episodeNum: episodeNumber).sink {
+        GetEpisodeUseCases().getEpisodeInfo(episodeNum: episode).sink { 
             completion in
             
             self.isLoading = false
@@ -48,5 +36,7 @@ class EpisodeCellViewModel:EpisodeCellViewModelProtocol{
         } receiveValue: { response in
             self.episode = response
         }.store(in: &store)
+        
     }
+    
 }

@@ -2,7 +2,7 @@
 //  CharaceterInfoView + extension.swift
 //  RickAndMortyApp
 //
-//  Created by ANRA on 27/09/23.
+//  Created by David Castaño on 26/09/23.
 //
 
 import Foundation
@@ -27,14 +27,14 @@ extension CharacterInfoView{
                     episode in
                     
                     if let lastComponent = episode.split(separator:"/").last{
-                        EpisodeCellView(episode: Int(lastComponent) ?? 0)
+                        EpisodeCellView(viewModel: EpisodeCellViewModel(episodeNumber: Int(lastComponent) ?? 0, interactor: GetEpisodeUseCases()))
                     }
                 }
             }
             .padding(.vertical, 4)
             .padding(.horizontal, 8)
         }
-        .background(Color("MortyBlue").opacity(1))
+        .background(MortyColors.shared.MortyBlue)
     }
     
     var description: some View{
@@ -52,7 +52,7 @@ extension CharacterInfoView{
                 label: {
                     Text("Tap to list episodes related to this character")
                         .bold()
-                        .foregroundColor(Color("MortyGreen"))
+                        .foregroundColor(MortyColors.shared.MortyGreen)
                 }
             }
             .foregroundColor(Color.white)
@@ -73,7 +73,7 @@ extension CharacterInfoView{
             ProgressView()
                 .frame(width:250, height: 250)
         }.frame(maxWidth:250, maxHeight: 250)
-            .background(Color("MortyGreen")
+            .background(MortyColors.shared.MortyGreen
             .opacity(0.8))
             .cornerRadius(100)
     }
