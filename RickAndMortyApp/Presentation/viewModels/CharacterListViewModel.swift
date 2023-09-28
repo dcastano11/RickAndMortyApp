@@ -24,12 +24,12 @@ protocol CharacterListViewModelProtocol: ObservableObject {
 class CharacterListViewModel: CharacterListViewModelProtocol{
     
     @Published var textFieldBuffer: String = ""
-    {didSet{filterRecipes(searchWord: textFieldBuffer)}}
+    {didSet{filterCharacters(searchWord: textFieldBuffer)}}
     var interactor: CharacterListUseCasesProtocol// = CharacterListUseCases()
     @Published var currentPage = 0
     {didSet{hasMorePages = currentPage < maxPage}}
     @Published var listData: [Character] = []
-    {didSet{filterRecipes(searchWord: textFieldBuffer)}}
+    {didSet{filterCharacters(searchWord: textFieldBuffer)}}
     @Published var filteredListData: [Character] = []
     @Published var isLoading = false
     @Published var hasMorePages = true
@@ -40,10 +40,14 @@ class CharacterListViewModel: CharacterListViewModelProtocol{
         self.interactor = interactor
     }
     
-    func filterRecipes(searchWord:String?){
+    func filterCharacters(searchWord:String?){
         if let word = searchWord, word != "" {
+            filteredListData = []
             filteredListData = listData.filter { character in
                 character.name.lowercased().contains(word.lowercased())
+            }
+            filteredListData.forEach { char in
+                print(char)
             }
         }
         else{filteredListData = listData}

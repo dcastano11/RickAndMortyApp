@@ -37,7 +37,7 @@ struct CharacterListView<VM>: View where VM: CharacterListViewModelProtocol {
                                     gender: element.gender,
                                     picture: element.image
                             )
-                            .id(index)
+                            //.id(index)
                                 .gesture(
                                     TapGesture()
                                         .onEnded { _ in
